@@ -1,0 +1,157 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<div class="ng-cloak" ng-controller="homeController as home" ng-hide="home.dataService.addingPhotos">
+    <div class="row well header">
+        <h1>Search For Photos</h1>
+        <div id="searchBar">
+            <input ng-model="home.searchString.SearchCondition" type="text" placeholder="e.g. john or john@gmail.com..." class="form-control">
+            <button class="btn btn-default" ng-click="home.searchImagesClick(home.searchString)">
+                <strong>Search</strong>
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Getting started</h2>
+            <p>
+                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
+                enables a clean separation of concerns and gives you full control over markup
+                for enjoyable, agile development.
+            </p>
+            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Get more libraries</h2>
+            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
+            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Web Hosting</h2>
+            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
+            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+        </div>
+    </div>
+
+
+
+</div>
+<div class="ng-cloak" ng-controller="addController as add" ng-show="add.dataService.addingPhotos">
+    <div class="row well header">
+        <h1>Add New Photos</h1>
+        <form>
+            <div class="form-group">
+                <label for="inputName">Name</label>
+                <input type="text" class="form-control" id="inputName" placeholder="Enter name">
+            </div>
+            <div class="form-group">
+                <label for="inputEmail">Email</label>
+                <input type="email" class="form-control" id="inputEmail" placeholder="Enter email">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <div class="row">
+
+        <form class="dropzone" id="dropzoneForm">
+            <div class="fallback">
+                <input name="file" type="file" multiple />
+                <input type="submit" value="Upload" />
+            </div>
+        </form>
+        <button type="submit" id="imgsubbutt">Submit data and files!</button>
+
+    </div>
+</div>
+
+
+@section scripts {
+    <script src="~/Scripts/angular/addController.js"></script>
+    <script src="~/Scripts/angular/homeController.js"></script>
+
+  <script type="text/javascript">
+
+       Dropzone.options.dropzoneForm = {
+           autoProcessQueue: false,
+           url: "Home/SaveUploadedFile",
+           acceptedFiles: 'image/jpeg, images/jpg, image/png',
+           uploadMultiple: true,
+           parallelUploads: 100,
+           maxFiles: 12,
+           maxFilesize: 1,
+           previewTemplate: `<div class="table table-striped files" id="previews">
+
+                              <div id="template" class="file-row">
+                                <!-- This is used as the file preview template -->
+                                <div>
+                                    <span class="preview"><img data-dz-thumbnail /></span>
+                                </div>
+                                <div>
+                                    <p class="name" data-dz-name></p>
+                                    <input class="text imageDescription" type="text" name="description" placeholder="Searchable Description">
+                                </div>  ... etc.
+                              </div>
+                            </div>`,
+
+           init: function () {
+               var dropzoneForm = this;
+               this.on("complete", function (file) {
+                   var args = Array.prototype.slice.call(arguments);
+                   console.log(args);
+
+                   setTimeout(function () {
+                       dropzoneForm.removeFile(file)
+                   }, 1250);
+               });
+               this.on("sending", function (file, xhr, formData) {
+
+                   // Get and pass description field data
+                   var test = file.previewElement.querySelector(".imageDescription").value;
+
+                   formData.append("test", test);
+                   formData.append('name', jQuery('#inputName').val());
+                   formData.append('email', jQuery('#inputEmail').val());
+                   console.log(formData);
+               });
+ 
+               this.on("maxfilesexceeded", function (data) {
+                   var res = eval('(' + data.xhr.responseText + ')');
+
+               });
+               this.on("addedfile", function (file) {
+
+                   // Create the remove button
+                   var removeButton = Dropzone.createElement("<button>Remove file</button>");
+
+
+                   // Capture the Dropzone instance as closure.
+                   var _this = this;
+
+
+                   $("#imgsubbutt").click(function (e) {
+                       e.preventDefault();
+                       dropzoneForm.processQueue();
+                       dropzoneForm.removeAllFiles();
+                   });
+
+                   // Listen to the click event
+                   removeButton.addEventListener("click", function (e) {
+                       // Make sure the button click doesn't submit the form:
+                       e.preventDefault();
+                       e.stopPropagation();
+                       // Remove the file preview.
+                       _this.removeFile(file);
+                       // If you want to the delete the file on the server as well,
+                       // you can do the AJAX request here.
+                   });
+
+                   // Add the button to the file preview element.
+                   file.previewElement.appendChild(removeButton);
+               });
+           }
+       };
+</script>
+  
+}
