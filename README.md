@@ -27,5 +27,12 @@ For example:
 - If photos are added to an existing name and email combination, they will be added to his list.  
 - Photos have static width and height
 - Allow some time to spin, AWS free server may be slow.
-- Mostly mobile responsive.
+- Mostly mobile responsive.  
+  
+- Views are mainly from Home/Index.cshtml and the layout Shared/_Layout.cshtml  
+- Angular controllers and services located in Scripts/angular  
+- Drag and drop done through dropzonejs, implemented in Index.cshtml's script area  
+- When sending images, Controllers/HomeController is hit, all other API's are through Controllers/API/ImagesApiController.cs  
+- API's call the service in Services/ImageUserService.cs
+
 
