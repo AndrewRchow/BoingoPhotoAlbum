@@ -13,6 +13,7 @@ Search for images by either name or email, or use '*' to get all images.
 For example:  
    - john@john<span></span>.com
    - john  
+   - *  
    
  To remove pictures, press the delete button after searching for the user.  
  This will delete all of the specified user's images.  
