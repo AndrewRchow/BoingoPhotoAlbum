@@ -10,6 +10,7 @@ namespace BoingoPhotoAlbum.Interfaces
     {
         int AddUser(AddUser model);
         void AddImages(AddPhotos model);
-        List<GetImages> GetUserImages(Search searchModel);
+        List<GetImages> GetUserImages(string SearchCondition);
+        void Delete(int Id);
     }
 }

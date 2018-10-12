@@ -1,0 +1,65 @@
+﻿@using BoingoPhotoAlbum.Models
+@model LoginViewModel
+@if (Request.IsAuthenticated)
+{
+    Response.Redirect("/home/index");
+}
+ <style>
+     #loginTitle{
+         display:inline-block;
+         font-weight:600;
+         margin-left:1rem;
+     }
+
+     .btn{
+         width:10rem;
+     }
+
+     #registerLink{
+         padding-left:4rem;
+     }
+ </style>
+<div class="row">
+    <div class="col-md-8"  style="margin-top:10%; margin-left:10%;">
+        <section id="loginForm">
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <div style="text-align:center;">
+                    <a href="https://github.com/AndrewRchow/boingophotoalbum" target="_blank" class="fab fa-github fa-3x"></a>
+                    <h1 id="loginTitle">PHOTO ALBUM</h1>
+                </div>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="LOG IN" class="btn btn-info" id="loginButton" />
+                    </div>
+                </div>
+                <p id="registerLink">
+                    @Html.ActionLink("Register as a new user", "Register")
+                </p>
+
+            }
+        </section>
+    </div>
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,68 +1,73 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+@using Microsoft.AspNet.Identity
+@if (!Request.IsAuthenticated)
+{
+    Response.Redirect("/Account/Login");
+}
 <div class="ng-cloak" ng-controller="homeController as home" ng-hide="home.dataService.addingPhotos">
     <div class="row well header">
-        <h1>Search For Photos</h1>
+        <h2>Search For Photos</h2>
         <div id="searchBar">
-            <input ng-model="home.searchString.SearchCondition" type="text" placeholder="e.g. john or john@gmail.com..." class="form-control">
-            <button class="btn btn-default" ng-click="home.searchImagesClick(home.searchString)">
+            <input ng-model="home.searchCondition" type="text" placeholder="e.g. john or john@gmail.com..." class="form-control">
+            <button class="btn btn-info" ng-click="home.searchImagesClick(home.searchCondition)" ng-disabled="home.searchCondition === ''">
                 <strong>Search</strong>
             </button>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-md-4">
-            <h2>Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
-            </p>
-            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+    <div class="row well infoRow">
+        <div ng-show="home.userImages==''">
+            <h5>Search for some images!</h5>
         </div>
-        <div class="col-md-4">
-            <h2>Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </div>
-        <div class="col-md-4">
-            <h2>Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+        <div class="row well" ng-repeat="x in home.userImages">
+            <div class="col-md-3">
+                <div style="display:none;">{{x.Id}}</div>
+                <h4><strong>NAME</strong></h4>
+                <h5>{{x.Name}}</h5>
+                <h4><strong>EMAIL</strong></h4>
+                <h5>{{x.Email}}</h5>
+            </div>
+            <div class="col-md-9 imagesBlock">
+                <div ng-repeat="y in x.Images" class="col-md-4 imageBlock">
+                    <img ng-src="data:image/JPEG;base64,{{y.Image}}" />
+                    <div class="descriptionBox">
+                        <p>{{y.Description}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <button class="btn btn-danger deleteButton" ng-click="home.deleteImageClick(x.Id)">
+                    <strong>Delete</strong>
+                </button>
+            </div>
         </div>
     </div>
-
-
-
 </div>
-<div class="ng-cloak" ng-controller="addController as add" ng-show="add.dataService.addingPhotos">
+
+<div class="ng-cloak" id="addController" ng-controller="addController as add" ng-show="add.dataService.addingPhotos">
     <div class="row well header">
-        <h1>Add New Photos</h1>
-        <form>
+        <h2>Add New Photos</h2>
+        <form name="addImagesForm" id="addImagesForm">
             <div class="form-group">
                 <label for="inputName">Name</label>
-                <input type="text" class="form-control" id="inputName" placeholder="Enter name">
+                <input type="text" class="form-control" name="inputName" id="inputName" placeholder="Enter name" ng-model="add.inputName" required>
             </div>
             <div class="form-group">
                 <label for="inputEmail">Email</label>
-                <input type="email" class="form-control" id="inputEmail" placeholder="Enter email">
+                <input type="email" class="form-control" name="inputEmail" id="inputEmail" placeholder="Enter email" ng-model="add.inputEmail" required>
             </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
     <div class="row">
-
-        <form class="dropzone" id="dropzoneForm">
+        <form class="dropzone" id="dropzoneForm" style="max-width:1120px; margin-left:auto; margin-right:auto;">
             <div class="fallback">
                 <input name="file" type="file" multiple />
                 <input type="submit" value="Upload" />
             </div>
         </form>
-        <button type="submit" id="imgsubbutt">Submit data and files!</button>
-
+        <button type="submit" id="imagesSubmit" class="btn btn-primary" form="addImagesForm" 
+                ng-disabled="addImagesForm.inputName.$invalid || addImagesForm.inputEmail.$invalid">Submit Photos</button>
     </div>
 </div>
 
@@ -71,87 +76,75 @@
     <script src="~/Scripts/angular/addController.js"></script>
     <script src="~/Scripts/angular/homeController.js"></script>
 
-  <script type="text/javascript">
-
-       Dropzone.options.dropzoneForm = {
-           autoProcessQueue: false,
-           url: "Home/SaveUploadedFile",
-           acceptedFiles: 'image/jpeg, images/jpg, image/png',
-           uploadMultiple: true,
-           parallelUploads: 100,
-           maxFiles: 12,
-           maxFilesize: 1,
-           previewTemplate: `<div class="table table-striped files" id="previews">
-
-                              <div id="template" class="file-row">
-                                <!-- This is used as the file preview template -->
-                                <div>
-                                    <span class="preview"><img data-dz-thumbnail /></span>
+    <script type="text/javascript">
+        //DropzoneJS script
+        Dropzone.options.dropzoneForm = {
+            autoProcessQueue: false,
+            url: "Home/SaveUploadedFile",
+            acceptedFiles: 'image/jpeg, images/jpg, image/png',
+            uploadMultiple: true,
+            parallelUploads: 100,
+            maxFiles: 12,
+            maxFilesize: 2,
+            previewTemplate: `<div id="previewTemplate" class="dz-preview dz-file-preview" 
+                                style="padding:1rem; border-radius:3px; height:325px;">
+                                <div class="dz-details" style="height:200px; width:200px;">
+                                    <div class="dz-filename"><span data-dz-name></span></div>
+                                    <div class="dz-size" data-dz-size></div>
+                                    <img data-dz-thumbnail style="height:190px; width:200px;"/>
                                 </div>
-                                <div>
-                                    <p class="name" data-dz-name></p>
-                                    <input class="text imageDescription" type="text" name="description" placeholder="Searchable Description">
-                                </div>  ... etc.
-                              </div>
+                                <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+                                  <input class="text form-control imageDescription" type="text" name="description" 
+                                    placeholder="Add Description">
                             </div>`,
 
-           init: function () {
-               var dropzoneForm = this;
-               this.on("complete", function (file) {
-                   var args = Array.prototype.slice.call(arguments);
-                   console.log(args);
+            init: function () {
+                var dropzoneForm = this;
+            
+                this.on("addedfile", function (file) {
+                    var removeButton = Dropzone.createElement(`<button class='btn btn-warning' style='cursor:pointer; margin-top:1rem;'>
+                                                               Remove file</button>`);
+                    var _this = this;
 
-                   setTimeout(function () {
-                       dropzoneForm.removeFile(file)
-                   }, 1250);
-               });
-               this.on("sending", function (file, xhr, formData) {
+                    $("#imagesSubmit").click(function (e) {
+                        e.preventDefault();
+                        dropzoneForm.processQueue();
+                        dropzoneForm.removeAllFiles();
+                    });
 
-                   // Get and pass description field data
-                   var test = file.previewElement.querySelector(".imageDescription").value;
+                    removeButton.addEventListener("click", function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        _this.removeFile(file);
+                    });
+                    file.previewElement.appendChild(removeButton);
+                });
 
-                   formData.append("test", test);
-                   formData.append('name', jQuery('#inputName').val());
-                   formData.append('email', jQuery('#inputEmail').val());
-                   console.log(formData);
-               });
- 
-               this.on("maxfilesexceeded", function (data) {
-                   var res = eval('(' + data.xhr.responseText + ')');
+                this.on("maxfilesexceeded", function (data) {
+                    var res = eval('(' + data.xhr.responseText + ')');
 
-               });
-               this.on("addedfile", function (file) {
+                });
 
-                   // Create the remove button
-                   var removeButton = Dropzone.createElement("<button>Remove file</button>");
+                this.on("sending", function (file, xhr, formData) {
+                    // Get and pass description field data
+                    var test = file.previewElement.querySelector(".imageDescription").value;
 
+                    formData.append("test", test);
+                    formData.append('name', jQuery('#inputName').val());
+                    formData.append('email', jQuery('#inputEmail').val());
+                });
 
-                   // Capture the Dropzone instance as closure.
-                   var _this = this;
-
-
-                   $("#imgsubbutt").click(function (e) {
-                       e.preventDefault();
-                       dropzoneForm.processQueue();
-                       dropzoneForm.removeAllFiles();
-                   });
-
-                   // Listen to the click event
-                   removeButton.addEventListener("click", function (e) {
-                       // Make sure the button click doesn't submit the form:
-                       e.preventDefault();
-                       e.stopPropagation();
-                       // Remove the file preview.
-                       _this.removeFile(file);
-                       // If you want to the delete the file on the server as well,
-                       // you can do the AJAX request here.
-                   });
-
-                   // Add the button to the file preview element.
-                   file.previewElement.appendChild(removeButton);
-               });
-           }
-       };
-</script>
-  
+                this.on("complete", function (file) {
+                    setTimeout(function () {
+                        var scope = angular.element(document.getElementById("addController")).scope();
+                        scope.$apply(function () {
+                            scope.submitComplete();
+                        });
+                        dropzoneForm.removeFile(file)
+                    }, 700);
+                });
+            }
+        };
+    </script>
 }
+

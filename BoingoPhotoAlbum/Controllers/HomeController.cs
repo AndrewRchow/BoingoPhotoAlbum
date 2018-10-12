@@ -47,7 +47,6 @@ namespace BoingoPhotoAlbum.Controllers
                     MemoryStream target = new MemoryStream();
                     file.InputStream.CopyTo(target);
                     byte[] data = target.ToArray();
-
                     imagesModel.Image = data;
                     imagesModel.Name = fName;
                     imagesModel.Description = Request.Form["description"].Split(',')[i];

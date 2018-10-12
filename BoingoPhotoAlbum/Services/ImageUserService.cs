@@ -6,6 +6,7 @@ using BoingoPhotoAlbum.Domain;
 using System.Data.SqlClient;
 using System.Configuration;
 using BoingoPhotoAlbum.Interfaces;
+using System.Data;
 
 namespace BoingoPhotoAlbum.Services
 {
@@ -15,7 +16,7 @@ namespace BoingoPhotoAlbum.Services
         {
             using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
-                int modified=1;
+                int modified = 1;
                 conn.Open();
                 {
                     using (SqlCommand cmd = new SqlCommand("dbo.ImageUser_Add", conn))
@@ -40,7 +41,7 @@ namespace BoingoPhotoAlbum.Services
                     using (SqlCommand cmd = new SqlCommand("dbo.Images_Add", conn))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@Image", model.Image);
+                        cmd.Parameters.Add("@Image", SqlDbType.VarBinary).Value = model.Image;
                         cmd.Parameters.AddWithValue("@Name", model.Name);
                         cmd.Parameters.AddWithValue("@Description", model.Description);
                         cmd.Parameters.AddWithValue("@UserId", model.UserId);
@@ -50,37 +51,55 @@ namespace BoingoPhotoAlbum.Services
                 conn.Close();
             }
         }
-        public List<GetImages> GetUserImages(Search searchModel)
+        public List<GetImages> GetUserImages(string SearchCondition)
         {
-                List<GetImages> ImagesList = new List<GetImages>();
-                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            List<GetImages> ImagesList = new List<GetImages>();
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand("dbo.Images_Get", conn))
                 {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand("dbo.Images_Get", conn))
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@SearchCondition", SearchCondition);
+                    SqlDataReader reader = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+                    while (reader.Read())
                     {
-                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@SearchCondition", searchModel.SearchCondition);
-                        SqlDataReader reader = cmd.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
-                        while (reader.Read())
-                        {
-                            GetImages model = Mapper(reader);
-                            ImagesList.Add(model);
-                        }
+                        GetImages model = Mapper(reader);
+                        ImagesList.Add(model);
                     }
-                    conn.Close();
                 }
-                return ImagesList;
+                conn.Close();
+            }
+            return ImagesList;
         }
         private GetImages Mapper(SqlDataReader reader)
         {
             GetImages model = new GetImages();
             int index = 0;
-            model.Image = (byte[])reader["Image"];
+            model.Image = (byte[])reader[index++];
             model.Description = reader.GetString(index++);
             model.Name = reader.GetString(index++);
             model.Email = reader.GetString(index++);
+            model.Id = reader.GetInt32(index++);
             index++;
             return model;
+        }
+
+        public void Delete(int Id)
+        {
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                conn.Open();
+                {
+                    using (SqlCommand cmd = new SqlCommand("dbo.ImageUser_Delete", conn))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@Id", Id);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                conn.Close();
+            }
         }
     }
 }

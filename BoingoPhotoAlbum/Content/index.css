@@ -1,8 +1,7 @@
-﻿body {
-}
-
-.nav li {
+﻿.nav li {
     color:white;
+    font-weight:600;
+    cursor:pointer;
 }
 
 .row {
@@ -25,4 +24,84 @@
 
 input {
     max-width: 600px;
+}
+
+.well{
+    margin:2rem;
+    min-height:0px !important;
+}
+
+.infoRow {
+    background-color: rgb(222,222,228);
+    min-height: 500px;
+}
+
+img{
+    width:214px;
+    height:170px;
+    padding-bottom:1rem;
+}
+
+.imagesBlock {
+
+    border-left:1px solid lightgray;
+}
+.imageBlock {
+    padding:1rem;
+}
+.descriptionBox {
+    background-color:white;
+    border:1px solid black;
+    border-radius:3px;
+    padding:0.5rem;
+    
+}
+
+.deleteButton {
+    margin-left:2rem;
+}
+
+#imagesSubmit{
+    margin-top:1rem;
+    margin-left:2.5rem;
+}
+
+.removed {
+    overflow: hidden;
+    -webkit-animation: remove 1.2s ease normal forwards;
+    animation: remove 1s ease normal forwards;
+}
+@-webkit-keyframes remove {
+    0% {
+        opacity: 1;
+        max-height: 1000px;
+    }
+
+    100% {
+        padding: 0;
+        margin: 0;
+        opacity: 0;
+        max-height: 0px;
+    }
+}
+
+@keyframes remove {
+    0% {
+        opacity: 1;
+        max-height: 1000px;
+    }
+
+    100% {
+        padding:0;
+        margin:0;
+        opacity: 0;
+        max-height: 0px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    img {
+        max-width: 164px;
+        height: 120px;
+    }
 }
