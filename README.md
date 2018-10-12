@@ -2,12 +2,26 @@
 <http://boingophotoalbum-dev.us-west-2.elasticbeanstalk.com/>  
 Photo Album web application with drag and drop features. 
   
-**How To Use**  
+## How To Use  
 Log in with email/pass
-   - boingo@boingo.com
+   - <span></span>boingo@boingo.com
    - Password1!
    
-Search for images by either name or email, or use '*' To get all images.
+Search for images by either name or email, or use '*' to get all images.  
+For example:  
+   - <span></span>john@john.com
+   - john  
+   
+ To remove pictures, press the delete button after seraching for the user.  
+ This will delete all of the specified user's images.  
+   
+ To add images, click the Add Images tab, then input a name and email.  
+ Then drag and drop or upload your photos.  
+ You can add a descriptions to each image before submitting if needed.  
+ Press submit, and the images should be visible after searching the user again.  
   
 
+## Developer notes  
+-Current login requires a full email and nonbasic password
+-
 
