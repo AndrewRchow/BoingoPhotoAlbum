@@ -23,9 +23,9 @@ For example:
 
 ## Developer notes  
 - Current login requires a full email and nonbasic password.
-- When adding photos, email does not have validation.
 - Users with shared emails but different names and vise versa are unique  
 - If photos are added to an existing name and email combination, they will be added to his list.  
+- Photos have static width and height
 - Allow some time to spin, AWS free server may be slow.
 - Mostly mobile responsive.
 
