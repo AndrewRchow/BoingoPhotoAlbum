@@ -18,7 +18,7 @@ For example:
  To add images, click the Add Images tab, then input a name and email.  
  Then drag and drop or upload your photos.  
  You can add a descriptions to each image before submitting if needed.  
- Press submit, and the images should be visible after searching the user again.  
+ Press submit, and the images should be visible when searched for.  
   
 
 ## Developer notes  
