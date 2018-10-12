@@ -3,10 +3,10 @@
 Photo Album web application with drag and drop features. 
   
 ## How To Use  
-Log in with email/pass
+Log in with this email/pass Or register as a new user.
    - boingo@boingo<span></span>.com
    - Password1  
-Or register as a new user.
+
   
 All logins share the same image database.
 Search for images by either name or email, or use '*' to get all images.  
