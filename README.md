@@ -12,8 +12,7 @@ All logins share the same image database.
 Search for images by either name or email, or use '*' to get all images.  
 For example:  
    - john@john<span></span>.com
-   - john  
-   - *  
+   - john   
    
  To remove pictures, press the delete button after searching for the user.  
  This will delete all of the specified user's images.  
@@ -29,6 +28,7 @@ For example:
 - Users with shared emails but different names and vise versa are unique  
 - If photos are added to an existing name and email combination, they will be added to his list.  
 - Photos have static width and height
+- Buttons disabled if not validated.
 - Allow some time to spin, AWS free server may be slow.
 - Mostly mobile responsive.  
   
