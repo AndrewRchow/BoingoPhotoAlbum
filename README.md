@@ -4,15 +4,15 @@ Photo Album web application with drag and drop features.
   
 ## How To Use  
 Log in with email/pass
-   - <span></span>boingo@boingo.com
+   - boingo@boingo<span></span>.com
    - Password1!
    
 Search for images by either name or email, or use '*' to get all images.  
 For example:  
-   - <span></span>john@john.com
+   - john@john<span></span>.com
    - john  
    
- To remove pictures, press the delete button after seraching for the user.  
+ To remove pictures, press the delete button after searching for the user.  
  This will delete all of the specified user's images.  
    
  To add images, click the Add Images tab, then input a name and email.  
