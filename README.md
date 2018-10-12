@@ -25,5 +25,6 @@ For example:
 - Current login requires a full email and nonbasic password.
 - When adding photos, email does not have validation.
 - Users with shared emails but different names and vise versa are unique  
-- If photos are added to an existing name and email combination, they will be added to his list. 
+- If photos are added to an existing name and email combination, they will be added to his list.  
+- Mostly mobile responsive.
 
