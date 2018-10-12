@@ -6,7 +6,8 @@ Photo Album web application with drag and drop features.
 Log in with email/pass
    - boingo@boingo<span></span>.com
    - Password1!
-   
+  
+All logins share the same image database.
 Search for images by either name or email, or use '*' to get all images.  
 For example:  
    - john@john<span></span>.com
