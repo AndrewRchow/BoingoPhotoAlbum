@@ -71,6 +71,10 @@ img{
     -webkit-animation: remove 1.2s ease normal forwards;
     animation: remove 1s ease normal forwards;
 }
+
+.removed + .well {
+    margin-top:0px;
+}
 @-webkit-keyframes remove {
     0% {
         opacity: 1;
