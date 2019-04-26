@@ -1,14 +1,7 @@
-# BoingoPhotoAlbum  
-<http://boingophotoalbum-dev.us-west-2.elasticbeanstalk.com/>  
+# PhotoAlbum  
 Photo Album web application with drag and drop features. 
   
 ## How To Use  
-Log in with this email/pass Or register as a new user.
-   - boingo@boingo<span></span>.com
-   - Password1  
-
-  
-All logins share the same image database.
 Search for images by either name or email, or use '*' to get all images.  
 For example:  
    - john@john<span></span>.com
@@ -24,8 +17,6 @@ For example:
   
 
 ## Developer notes  
-- Current login requires a full email and nonbasic password.
-- Users with shared emails but different names and vise versa are unique  
 - If photos are added to an existing name and email combination, they will be added to his list.  
 - Photos have static width and height
 - Buttons disabled if not validated.
